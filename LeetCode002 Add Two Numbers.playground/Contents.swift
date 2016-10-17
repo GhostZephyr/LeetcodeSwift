@@ -29,25 +29,18 @@ func addTwoNumbers(_ l1: ListNode?, _ l2: ListNode?) -> ListNode? {
         if temp1 == nil && temp2 != nil {
             
             tempResult.val += (temp2?.val)!
-            print("temp1 nil temp2Val", temp2?.val, "tempResultVal", tempResult.val)
-            
         } else if (temp2 == nil && temp1 != nil) {
-            print("temp2 nil")
             tempResult.val += (temp1?.val)!
         } else if (temp1 != nil && temp2 != nil) {
             
             tempResult.val += (temp1?.val)! + (temp2?.val)!
-            print("no nil", tempResult)
         } else {
-            print("break")
             break
         }
         
         if tempResult.val >= 10 {
-            print(">10 before")
             tempResult.next = ListNode(tempResult.val / 10)
             tempResult.val = tempResult.val % 10
-            print(">10 after")
         }
         
         temp1 = temp1?.next
@@ -72,8 +65,6 @@ func getArrayFromListNode(_ node: ListNode?) -> [Int] {
         tempArray.append((x?.val)!)
         
     }
-    
-    //    print(tempArray)
     return tempArray
 }
 
