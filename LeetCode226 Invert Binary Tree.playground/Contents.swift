@@ -14,7 +14,6 @@ class Solution {
         if root == nil {
             return nil
         }
-        
         let tempNode = root?.left
         root?.left = invertTree(root?.right)
         root?.right = invertTree(tempNode)

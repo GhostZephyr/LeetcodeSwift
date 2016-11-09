@@ -14,7 +14,7 @@ class Solution {
             }
         } while x >= 0 && y < n
         return false
-    }
+    }   
 }
 
 let s = Solution()
