@@ -1,3 +1,5 @@
+import Foundation
+
 class Solution {
     
     var queenRs = Array<Array<Array<Int>>>()
@@ -40,23 +42,17 @@ class Solution {
         if currentIndex == count {
             return true
         } else {
-//            print("tables", tables, "curIndex", currentIndex, "count", count, "canPutItems", canPutItems)
             var nextPutItems = canPutItems
             let (m, n) = nextPutItems.first!
-//            print("try put queen in", (m, n))
             nextPutItems.removeFirst()
             
             let newForPutItems = nextPutItems
             var tempItems = Array<(Int, Int)>()
             for (i, j) in newForPutItems {
-//                print("i, j", (i, j), "m, n", (m, n))
                 if i != m && j != n && (abs(i - m) != abs(j - n)) {
                     tempItems.append((i, j))
                 }
             }
-            
-//            print("nextPutItems:", nextPutItems)
-            
             if tempItems.count == 0 {
                 if currentIndex + 1 == count {
                     
@@ -66,16 +62,12 @@ class Solution {
                     
                     return false
                 }
-                
-//                print("Can't put any Queen", tables, "return to m n", (m, n), "nextPutItems", newForPutItems)
                 return solveNQueensInTables(tables, currentIndex, count, newForPutItems)
             } else {
                 var nextTable = tables
                 nextTable[m][n] = 1
-//                print("Put queen in", (m, n))
                 let rs = solveNQueensInTables(nextTable, currentIndex + 1, count, tempItems)
                 if !rs {
-//                    print("@@@@@@@@return to", tables, "can not put queen in", (m, n), "origin putItems", canPutItems)
                     return solveNQueensInTables(tables, currentIndex, count, newForPutItems)
                 } else {
                     return rs
@@ -85,6 +77,95 @@ class Solution {
     }
 }
 
-let s = Solution()
-print(s.solveNQueens(4))
+
+
+
+class SolutionTwo {
+    
+    var table = [Int]() //代表每行哪个位置放Queen
+    var result = [[String]]()
+    
+    
+    func solveNQueens(_ n: Int) -> [[String]] {
+        for _ in 0..<n {
+            table.append(-1)
+        }
+        
+        var i = 0, j = 0
+        var isPut = false
+        while i < n {
+            isPut = false
+            for x in j..<n {
+                if canPutInRowN(i, x) {
+                    table[i] = x
+                    i += 1 //可以放置 试探下一行
+                    j = 0
+                    isPut = true
+                    break
+                }
+            }
+            
+            if !isPut {
+                table[i] = -1
+                i -= 1
+                if i == -1 {
+                    break
+                } else {
+                    j = table[i] + 1
+                }
+            }
+            
+            if i == -1 {
+                break //已查出所有的解
+            }
+            
+            if i == n {
+                let rs = table.map { num -> String in
+                    var str = ""
+                    for i in 0..<n {
+                        if i == num {
+                            str.append("Q")
+                        } else {
+                            str.append(".")
+                        }
+                    }
+                    return str
+                }
+                
+                result.append(rs)
+                
+                i -= 1
+                j = table[i] + 1
+            }
+            
+        }
+        
+        return result
+    }
+
+    func canPutInRowN(_ m: Int, _ n: Int) -> Bool {
+        for i in 0..<m {
+            if table[i] == -1 {
+                return true
+            }
+            if ((table[i] == n)
+                || abs(i - m) == abs(table[i] - n)) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+
+var beforeDate = Date()
+let s = SolutionTwo()
+print(s.solveNQueens(8))
+print(Date().timeIntervalSince(beforeDate) * 1000)
+
+
+let s2 = Solution()
+beforeDate = Date()
+print(s2.solveNQueens(6))
+print(Date().timeIntervalSince(beforeDate) * 1000)
 
